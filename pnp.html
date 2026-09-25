@@ -1,0 +1,2054 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Pinocchio: È solo una bugia — Kit Print & Play</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Lora:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: #888;
+      color: #2b1a11;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .sheet {
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto 10mm;
+      background: #fff;
+      padding: 10mm 12mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      position: relative;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    }
+
+    @media print {
+      body {
+        background: none;
+      }
+      .sheet {
+        margin: 0;
+        box-shadow: none;
+        width: 100vw;
+        height: 100vh;
+      }
+    }
+
+    .sheet-header {
+      border-bottom: 2px solid #8c601c;
+      padding-bottom: 4mm;
+      margin-bottom: 4mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .sheet-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13pt;
+      font-weight: 900;
+      color: #442a1b;
+      letter-spacing: 0.5px;
+    }
+
+    .sheet-sub {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: #8c601c;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sheet-footer {
+      border-top: 1px solid #d6c6ad;
+      padding-top: 3mm;
+      margin-top: 3mm;
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 7.5pt;
+      color: #777;
+    }
+
+    /* 3x3 Grid */
+    .grid-3x3 {
+      display: grid;
+      grid-template-columns: repeat(3, 59mm);
+      grid-template-rows: repeat(3, 83mm);
+      gap: 3.5mm;
+      justify-content: center;
+      align-content: center;
+      margin: auto 0;
+    }
+
+    .card-cell {
+      width: 59mm;
+      height: 83mm;
+      position: relative;
+      background: #fff;
+      border-radius: 3mm;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0.5pt solid #ddd;
+    }
+
+    .card-cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      display: block;
+    }
+
+    /* 4x5 Grid for Nose Cards */
+    .grid-4x5 {
+      display: grid;
+      grid-template-columns: repeat(4, 43mm);
+      grid-template-rows: repeat(5, 51mm);
+      gap: 3mm;
+      justify-content: center;
+      align-content: center;
+      margin: auto 0;
+    }
+
+    .card-cell-mini {
+      width: 43mm;
+      height: 51mm;
+      position: relative;
+      background: #fff;
+      border-radius: 2mm;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0.5pt solid #ddd;
+    }
+
+    .card-cell-mini img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      display: block;
+    }
+
+    /* Precision Crop Marks */
+    .crop-mark {
+      position: absolute;
+      width: 4mm;
+      height: 4mm;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .crop-mark.top-left {
+      top: 0; left: 0;
+      border-top: 1pt solid #000;
+      border-left: 1pt solid #000;
+    }
+    .crop-mark.top-right {
+      top: 0; right: 0;
+      border-top: 1pt solid #000;
+      border-right: 1pt solid #000;
+    }
+    .crop-mark.bottom-left {
+      bottom: 0; left: 0;
+      border-bottom: 1pt solid #000;
+      border-left: 1pt solid #000;
+    }
+    .crop-mark.bottom-right {
+      bottom: 0; right: 0;
+      border-bottom: 1pt solid #000;
+      border-right: 1pt solid #000;
+    }
+
+    /* Cover Sheet */
+    .cover-sheet {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      padding: 12mm 16mm;
+    }
+
+    .cover-img {
+      max-width: 120mm;
+      max-height: 85mm;
+      border-radius: 4mm;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border: 2px solid #fff;
+    }
+
+    .cover-title {
+      font-family: 'Cinzel', serif;
+      font-size: 22pt;
+      font-weight: 900;
+      color: #442a1b;
+      line-height: 1.2;
+    }
+
+    .cover-author {
+      font-family: 'Lora', serif;
+      font-size: 12pt;
+      font-style: italic;
+      color: #6d553f;
+      margin-top: 2mm;
+    }
+
+    .guide-box {
+      background: #faf6ef;
+      border: 1.5pt solid #b38234;
+      border-radius: 3mm;
+      padding: 4mm 7mm;
+      text-align: left;
+      font-size: 9pt;
+      line-height: 1.45;
+      width: 100%;
+    }
+
+    .guide-box h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 11pt;
+      color: #442a1b;
+      margin-bottom: 1.5mm;
+      text-align: center;
+    }
+
+    .guide-box ul {
+      margin-left: 5mm;
+    }
+
+    .guide-box li {
+      margin-bottom: 1mm;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cover & Printing Guide -->
+  <div class="sheet cover-sheet">
+    <div>
+      <div class="cover-title">PINOCCHIO: È SOLO UNA BUGIA</div>
+      <div class="cover-author">Un gioco di carte ideato da <strong>Federico Latini</strong></div>
+    </div>
+
+    <img src="pinocchio_cover_scaled_1789424189413.jpg" class="cover-img" alt="Copertina Ufficiale">
+
+    <div class="guide-box">
+      <h3>✂️ GUIDA ALLA STAMPA & AI 4 DORSI DIFFERENZIATI</h3>
+      <ul>
+        <li><strong>Stampa Classica a Fogli Separati:</strong> Il kit include tutti i fogli <em>Fronti</em> e i rispettivi fogli <em>Retri</em> stampabili separatamente.</li>
+        <li><strong>I 4 Dorsi Differenti per un Setup Immediato:</strong>
+          <ul>
+            <li><strong>Mazzo Avventura:</strong> Dorso classico con i due Pinocchi speculari e i 4 semi d'angolo.</li>
+            <li><strong>Mazzo Personaggi:</strong> Nuovo dorso con Maschere teatrali, Calamaio, Penna d'oca e Burattini.</li>
+            <li><strong>Carte Naso Intermedie:</strong> Nuovo dorso verticale in legno fiorito con foglie di quercia e boccioli.</li>
+            <li><strong>Carte Aiuto / Riepilogo:</strong> Sul dorso è stampato il <em>Riassunto Completo dei 6 Personaggi e delle Regole</em>, per una consultazione bifacciale rapida.</li>
+          </ul>
+        </li>
+        <li><strong>Impostazioni Stampante:</strong> Carta A4, scala <strong>100% («Dimensioni Effettive»)</strong>, non selezionare «Adatta alla pagina».</li>
+        <li><strong>Consiglio Assemblaggio:</strong> Taglia lungo i crocini esterni d'angolo e inserisci fronte e retro insieme dentro normali bustine protettive standard (con una carta comune usata come anima di rinforzo).</li>
+      </ul>
+    </div>
+
+    <div class="sheet-footer" style="width: 100%;">
+      <span>Edizione Ufficiale Print & Play Completa con Illustrazioni D'Autore e 4 Dorsi Differenziati</span>
+      <span>Autore: Federico Latini</span>
+    </div>
+  </div>
+
+  <!-- Mazzo Avventura 1 Fronti -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">MAZZO AVVENTURA — FRONTI (FOGLIO 1/2)</div>
+      <div class="sheet-sub">9 CARTE GRANDI (Zecchino 1-4 • Ciocco 1-4 • Tazzina 1)</div>
+    </div>
+    <div class="grid-3x3">
+  
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_zecchino_1.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_zecchino_2.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_zecchino_3.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_zecchino_4.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_ciocco_1.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_ciocco_2.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_ciocco_3.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_ciocco_4.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_tazzina_1.png" alt="Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Stampa formato A4 al 100% (Dimensioni effettive)</span>
+    </div>
+  </div>
+  
+
+  <!-- Mazzo Avventura 2 Fronti -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">MAZZO AVVENTURA — FRONTI (FOGLIO 2/2)</div>
+      <div class="sheet-sub">9 CARTE GRANDI (Tazzina 2-4 • Sciabola 1-4 • Jolly Seme • Jolly Numero)</div>
+    </div>
+    <div class="grid-3x3">
+  
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_tazzina_2.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_tazzina_3.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_tazzina_4.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_sciabola_1.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_sciabola_2.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_sciabola_3.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_sciabola_4.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_jolly_seme.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_jolly_numero.png" alt="Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Stampa formato A4 al 100% (Dimensioni effettive)</span>
+    </div>
+  </div>
+  
+
+  <!-- Mazzo Avventura Retri 1 -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">MAZZO AVVENTURA — RETRI (FOGLIO 1)</div>
+      <div class="sheet-sub">DORSO UFFICIALE DEI PINOCCHI SPECULARI (STAMPA SEPARATA)</div>
+    </div>
+    <div class="grid-3x3">
+  
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Stampa formato A4 al 100% (Dimensioni effettive)</span>
+    </div>
+  </div>
+  
+
+  <!-- Mazzo Avventura Retri 2 -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">MAZZO AVVENTURA — RETRI (FOGLIO 2)</div>
+      <div class="sheet-sub">DORSO UFFICIALE DEI PINOCCHI SPECULARI (STAMPA SEPARATA)</div>
+    </div>
+    <div class="grid-3x3">
+  
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Stampa formato A4 al 100% (Dimensioni effettive)</span>
+    </div>
+  </div>
+  
+
+  <!-- Personaggi dell'Avventura Fronti -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">PERSONAGGI DELL'AVVENTURA — FRONTI</div>
+      <div class="sheet-sub">6 PERSONAGGI CON RITRATTO D'AUTORE + 3 CARTE DI RIEPILOGO, PENALITÀ 3 NASI E VERITÀ DEL GRILLO</div>
+    </div>
+    <div class="grid-3x3">
+  
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_collodi.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_fatina.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_giudice.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_mangiafuoco.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_lucignolo.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_grillo.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_riepilogo.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_promemoria_regole.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_grillo_verita.png" alt="Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Stampa formato A4 al 100% (Dimensioni effettive)</span>
+    </div>
+  </div>
+  
+
+  <!-- Personaggi dell'Avventura Retri (NUOVO DORSO DEDICATO) -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">PERSONAGGI DELL'AVVENTURA — RETRI (NUOVO DORSO DEDICATO)</div>
+      <div class="sheet-sub">DORSO ILLUSTRATO CON MASCHERE TEATRALI, CALAMAIO E MARIONETTE (STAMPA SEPARATA)</div>
+    </div>
+    <div class="grid-3x3">
+  
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_personaggi_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_personaggi_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_personaggi_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_personaggi_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_personaggi_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_personaggi_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_personaggi_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_personaggi_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_personaggi_back.png" alt="Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Stampa formato A4 al 100% (Dimensioni effettive)</span>
+    </div>
+  </div>
+  
+
+  <!-- Setup Giocatori 1 Fronti -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">CARTE SETUP GIOCATORI — FRONTI (FOGLIO 1/2)</div>
+      <div class="sheet-sub">GIOCATORI 1, 2, 3 (Dichiarazione • Piccola Bugia • Grande Bugia)</div>
+    </div>
+    <div class="grid-3x3">
+  
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_dic_1.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_pb_1.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_gb_1.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_dic_2.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_pb_2.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_gb_2.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_dic_3.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_pb_3.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_gb_3.png" alt="Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Stampa formato A4 al 100% (Dimensioni effettive)</span>
+    </div>
+  </div>
+  
+
+  <!-- Setup Giocatori 2 Fronti -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">CARTE SETUP GIOCATORI — FRONTI (FOGLIO 2/2)</div>
+      <div class="sheet-sub">GIOCATORI 4, 5, 6 (Dichiarazione • Piccola Bugia • Grande Bugia)</div>
+    </div>
+    <div class="grid-3x3">
+  
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_dic_4.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_pb_4.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_gb_4.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_dic_5.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_pb_5.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_gb_5.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_dic_6.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_pb_6.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_gb_6.png" alt="Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Stampa formato A4 al 100% (Dimensioni effettive)</span>
+    </div>
+  </div>
+  
+
+  <!-- Setup Giocatori Retri -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">CARTE SETUP GIOCATORI — RETRI (FOGLIO 1/2)</div>
+      <div class="sheet-sub">DORSO UFFICIALE (STAMPA SEPARATA)</div>
+    </div>
+    <div class="grid-3x3">
+  
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Stampa formato A4 al 100% (Dimensioni effettive)</span>
+    </div>
+  </div>
+  
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">CARTE SETUP GIOCATORI — RETRI (FOGLIO 2/2)</div>
+      <div class="sheet-sub">DORSO UFFICIALE (STAMPA SEPARATA)</div>
+    </div>
+    <div class="grid-3x3">
+  
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_avv_back.png" alt="Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Stampa formato A4 al 100% (Dimensioni effettive)</span>
+    </div>
+  </div>
+  
+
+  <!-- Carte Aiuto & Riepilogo Giocatore Fronti -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">CARTE AIUTO & RIEPILOGO GIOCATORI — FRONTI</div>
+      <div class="sheet-sub">6 CARTE RIEPILOGO GIOCATORE (G1-G6) + CARTE PROMEMORIA</div>
+    </div>
+    <div class="grid-3x3">
+  
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_riep_1.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_riep_2.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_riep_3.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_riep_4.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_riep_5.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/role_riep_6.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_promemoria_regole.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_riepilogo.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_grillo_verita.png" alt="Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Stampa formato A4 al 100% (Dimensioni effettive)</span>
+    </div>
+  </div>
+  
+
+  <!-- Carte Aiuto & Riepilogo Giocatore Retri (RIASSUNTO DEI PERSONAGGI COME DORSO) -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">CARTE AIUTO & RIEPILOGO GIOCATORI — RETRI</div>
+      <div class="sheet-sub">RIASSUNTO DEI PERSONAGGI E REGOLE USATO COME DORSO BIFACCIALE (STAMPA SEPARATA)</div>
+    </div>
+    <div class="grid-3x3">
+  
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_riepilogo.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_riepilogo.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_riepilogo.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_riepilogo.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_riepilogo.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_riepilogo.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_riepilogo.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_riepilogo.png" alt="Card">
+      </div>
+    
+      <div class="card-cell">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/char_riepilogo.png" alt="Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Stampa formato A4 al 100% (Dimensioni effettive)</span>
+    </div>
+  </div>
+  
+
+  <!-- Carte Naso Intermedio 20 Fronti -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">CARTE NASO INTERMEDIO — FRONTI</div>
+      <div class="sheet-sub">20 CARTE VERTICALI COMPATTE (18 Riserva Comune + 2 Nasi di Scorta)</div>
+    </div>
+    <div class="grid-4x5">
+  
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Carte Naso Verticali (Formato compatto salva-spazio da tavolo)</span>
+    </div>
+  </div>
+  
+
+  <!-- Carte Naso Intermedio 20 Retri (NUOVO DORSO DEDICATO) -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">CARTE NASO INTERMEDIO — RETRI (NUOVO DORSO DEDICATO)</div>
+      <div class="sheet-sub">20 DORSI ILLUSTRATI VERTICALI CON RAMO FIORITO (STAMPA SEPARATA)</div>
+    </div>
+    <div class="grid-4x5">
+  
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Carte Naso Verticali (Formato compatto salva-spazio da tavolo)</span>
+    </div>
+  </div>
+  
+
+  <!-- Teste & Punte Naso 20 Fronti -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">TESTE & PUNTE DEL NASO — FRONTI</div>
+      <div class="sheet-sub">6 TESTE DI PINOCCHIO + 6 PUNTE DEL NASO + 8 NASI VARIANTI</div>
+    </div>
+    <div class="grid-4x5">
+  
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_testa.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_testa.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_testa.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_testa.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_testa.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_testa.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_punta.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_punta.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_punta.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_punta.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_punta.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_punta.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/user_card_naso_segment.jpg" alt="Mini Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Carte Naso Verticali (Formato compatto salva-spazio da tavolo)</span>
+    </div>
+  </div>
+  
+
+  <!-- Teste & Punte Naso 20 Retri (NUOVO DORSO DEDICATO) -->
+  
+  <div class="sheet">
+    <div class="sheet-header">
+      <div class="sheet-title">TESTE & PUNTE DEL NASO — RETRI (NUOVO DORSO DEDICATO)</div>
+      <div class="sheet-sub">20 DORSI ILLUSTRATI VERTICALI CON RAMO FIORITO (STAMPA SEPARATA)</div>
+    </div>
+    <div class="grid-4x5">
+  
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+      <div class="card-cell-mini">
+        <div class="crop-mark top-left"></div>
+        <div class="crop-mark top-right"></div>
+        <div class="crop-mark bottom-left"></div>
+        <div class="crop-mark bottom-right"></div>
+        <img src="pnp_assets/card_naso_back.png" alt="Mini Card">
+      </div>
+    
+    </div>
+    <div class="sheet-footer">
+      <span>Pinocchio: È solo una bugia di Federico Latini — Kit Print & Play Ufficiale</span>
+      <span>Carte Naso Verticali (Formato compatto salva-spazio da tavolo)</span>
+    </div>
+  </div>
+  
+
+</body>
+</html>
