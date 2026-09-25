@@ -131,6 +131,37 @@
       transform: translateY(-1px);
     }
 
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-pnp {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #c0392b;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(192, 57, 43, 0.25);
+    }
+
+    .btn-pnp:hover {
+      background: #962d22;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(192, 57, 43, 0.35);
+      color: #fff;
+    }
+
     /* Hero Section */
     .hero {
       padding: 48px 0 32px;
@@ -552,7 +583,7 @@
         line-height: 1.4;
       }
 
-      .site-nav, .btn-print, .setup-calc, .meta-pills {
+      .site-nav, .btn-print, .btn-pnp, .nav-actions, .setup-calc, .meta-pills, #download {
         display: none !important;
       }
 
@@ -659,10 +690,16 @@
         <li><a href="#turno">Il Turno</a></li>
         <li><a href="#jolly">Jolly</a></li>
         <li><a href="#faq">FAQ</a></li>
+        <li><a href="#download" style="color: #c0392b; font-weight: 700;">✂️ Scarica PNP</a></li>
       </ul>
-      <button class="btn-print" onclick="window.print()">
-        🖨️ Stampa PDF
-      </button>
+      <div class="nav-actions">
+        <a href="Print_and_Play_Pinocchio_Federico_Latini.pdf" download="Print_and_Play_Pinocchio_Federico_Latini.pdf" class="btn-pnp">
+          ✂️ Scarica PNP
+        </a>
+        <button class="btn-print" onclick="window.print()">
+          🖨️ Stampa PDF
+        </button>
+      </div>
     </div>
   </nav>
 
@@ -1033,6 +1070,57 @@
       <div class="example-box">
         <h4>❓ Con Lucignolo in gioco, se nessuno vuole rischiare ad accusare?</h4>
         <p>L'accusa con Lucignolo è libera e opzionale: se nessun giocatore decide di scattare e accusare, il giocatore di turno la passa liscia e il gioco prosegue normalmente.</p>
+      </div>
+    </section>
+
+    <!-- 8. Download Print & Play e Materiali -->
+    <section id="download" class="section-card" style="border: 2px solid var(--border-gold); background: #fdfaf5;">
+      <div class="section-header">
+        <span class="section-tag" style="background: #c0392b; color: white;">Materiali di Gioco</span>
+        <h2>Download &amp; Print &amp; Play</h2>
+      </div>
+      <p>
+        Scarica gratuitamente i file PDF ufficiali per stampare il gioco completo oppure conservare il regolamento illustrato aggiornato:
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px;">
+        <!-- PNP Card -->
+        <div style="background: white; border-radius: var(--radius-md); padding: 20px; border: 1px solid var(--border-wood); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+              <span style="font-size: 2rem;">✂️</span>
+              <div>
+                <h3 style="margin: 0; font-size: 1.15rem; color: var(--wood-dark);">Print &amp; Play Completo</h3>
+                <span style="font-size: 0.8rem; color: #7f8c8d;">PDF Pronto per la Stampa (Fronte/Retro A4)</span>
+              </div>
+            </div>
+            <p style="font-size: 0.9rem; color: #555; line-height: 1.5; margin-bottom: 16px;">
+              Include tutte le <strong>78 carte</strong> con margini di taglio, dorsi dedicati tematici, 6 carte Personaggio, carte Aiuto Giocatore e le carte Naso verticali compatte (20 per foglio).
+            </p>
+          </div>
+          <a href="Print_and_Play_Pinocchio_Federico_Latini.pdf" download="Print_and_Play_Pinocchio_Federico_Latini.pdf" class="btn-pnp" style="justify-content: center; padding: 12px 20px; font-size: 0.95rem;">
+            📥 Scarica Print &amp; Play (PDF)
+          </a>
+        </div>
+
+        <!-- Manual Card -->
+        <div style="background: white; border-radius: var(--radius-md); padding: 20px; border: 1px solid var(--border-wood); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+              <span style="font-size: 2rem;">📖</span>
+              <div>
+                <h3 style="margin: 0; font-size: 1.15rem; color: var(--wood-dark);">Regolamento Ufficiale</h3>
+                <span style="font-size: 0.8rem; color: #7f8c8d;">Manuale Grafico A4 Alta Risoluzione</span>
+              </div>
+            </div>
+            <p style="font-size: 0.9rem; color: #555; line-height: 1.5; margin-bottom: 16px;">
+              Il libretto delle regole completo con copertina originale, diagrammi esplicativi del turno, scheda Personaggi, calcolatore setup e FAQ.
+            </p>
+          </div>
+          <a href="Regolamento_Pinocchio_Federico_Latini.pdf" download="Regolamento_Pinocchio_Federico_Latini.pdf" class="btn-print" style="display: flex; justify-content: center; align-items: center; text-decoration: none; padding: 12px 20px; font-size: 0.95rem; text-align: center;">
+            📥 Scarica Regolamento (PDF)
+          </a>
+        </div>
       </div>
     </section>
 
