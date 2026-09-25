@@ -150,10 +150,10 @@ Il giocatore annuncia ad alta voce un **Seme** e un **Valore** (da 1 a 4).
 > **È severamente vietato dire la verità completa!**  
 > Non puoi mai dichiarare esattamente il seme e il numero della carta che hai in mano (salvo per effetto speciale della carta *Grillo*).  
 > Inoltre, la dichiarazione deve essere formalmente valida rispetto alla carta base scoperta a terra:
-> * **Valore più Basso:** È consentito SOLO se mantieni lo **STESSO SEME** della carta a terra.
-> * **Valore più Alto:** È consentito con un **QUALSIASI SEME** (uguale o diverso).
+> * **Stesso Seme:** Deve essere obbligatoriamente di **VALORE PIÙ BASSO** rispetto alla carta a terra.
+> * **Seme Differente:** Deve essere obbligatoriamente di **VALORE PIÙ ALTO** rispetto alla carta a terra.
 > 
-> 🚨 **PENALITÀ IMMEDIATA:** Se il giocatore dichiara per errore la **verità esatta** o compie una **dichiarazione incongrua/invalida** (es. annuncia un valore più basso cambiando seme), subisce immediatamente una penalità di **3 CARTE NASO** dalla riserva comune!
+> 🚨 **PENALITÀ IMMEDIATA:** Se il giocatore dichiara per errore la **verità esatta** o compie una **dichiarazione incongrua/invalida** (es. stesso seme con valore più alto, oppure seme differente con valore più basso), subisce immediatamente una penalità di **3 CARTE NASO** dalla riserva comune!
 
 * **Bluff del Jolly:** Non sei limitato ai numeri reali da 1 a 4. Puoi dichiarare valori impossibili (es. *Ciocco 7*) simulando di aver giocato un Jolly!
 
@@ -242,7 +242,7 @@ Se la carta rivelata è un Jolly:
 **D: Cosa succede se per sbaglio dico la verità sulla carta che ho pescato?**  
 R: Nel mondo di Pinocchio, la sincerità ordinaria è un errore fatale! Se un giocatore dichiara esattamente il seme e il numero della carta calata (senza che sia attivo l'effetto del *Grillo*), subisce immediatamente la penalità di **3 carte Naso** dalla riserva comune.
 
-**D: Cosa succede se faccio una dichiarazione non valida (es. valore più basso ma cambiando seme)?**  
+**D: Cosa succede se faccio una dichiarazione non valida (es. stesso seme con valore più alto, o seme differente con valore più basso)?**  
 R: Anche una dichiarazione formalmente scorretta costituisce una violazione delle regole di gioco e viene punita all'istante con **3 carte Naso** dalla riserva comune.
 
 **D: Con 18 carte naso fisse, cosa cambia se giochiamo in 2 o in 6?**  
